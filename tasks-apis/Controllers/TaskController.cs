@@ -1,70 +1,73 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using tasks_apis.Dtos;
-using tasks_apis.Models;
-using System.Collections.Generic;
-using tasks_apis.Repositories;
-using tasks_apis.Interfaces;
+using Tasks.Common.ViewModels;
+using Tasks.Infrastructure.Service;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TaskController : ControllerBase
 {
-    //private readonly IMapper _mapper;
-    private readonly TaskInterfaces _taskRepo;
+    private readonly ITaskService _taskService;
 
-    //private static List<TaskModel> tasks = new List<TaskModel>();
-
-    public TaskController(TaskInterfaces taskRepo)
+    public TaskController(ITaskService taskService)
     {
-        //_mapper = mapper;
-        _taskRepo = taskRepo;
+        _taskService = taskService;
     }
 
     [HttpPost("create-task")]
-    public IActionResult CreateTask([FromBody] CreateTaskDTO taskDto)
+    public async Task<ActionResult> CreateTask([FromBody] CreateTaskDto createTaskViewModel)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        var taskModel =  _taskRepo.CreateTaskAsync(taskDto);
-
-        return Ok(taskModel);
+        var response = await _taskService.CreateTask(createTaskViewModel);
+        return Created("", response);
     }
 
     [HttpGet("get-all-tasks")]
-    public async Task<IActionResult> GetAllTasksAsync()
+    public async Task<ActionResult> GetAllTasks()
     {
-        var task =  await _taskRepo.GetTasksAsync();
-
-        return Ok(task);
+        var response = await _taskService.GetTasks();
+        return Ok(response);
     }
 
     [HttpPut("edit-task/{id}")]
-    public  IActionResult EditTask(int id, [FromBody] CreateTaskDTO taskDto)
+    public async Task<ActionResult> UpdateTask(int id, [FromBody] CreateTaskDto createTaskViewModel)
     {
-        var updatedTask =  _taskRepo.UpdateTaskAsync(id, taskDto);
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
 
-        if (updatedTask == null)
+        var response = await _taskService.UpdateTask(id, createTaskViewModel);
+
+        if (response == null)
         {
             return NotFound(new { Message = "Task not found" });
         }
 
-        return Ok(updatedTask);
+        return Ok(response);
     }
 
     [HttpDelete("delete-task/{id}")]
-    public async Task<IActionResult> DeleteTask(int id)
+    public async Task<ActionResult> DeleteTask(int id)
     {
-        var result = await _taskRepo.DeleteTaskAsync(id);
+        var response = await _taskService.DeleteTask(id);
 
-        if (!result)
+        if (!response)
         {
             return NotFound(new { Message = "Task not found" });
         }
 
         return Ok(new { Message = "Task deleted successfully" });
+    }
+
+    [HttpGet("get-all-tasks-id-text")]
+    public async Task<ActionResult> GetTasksIdText()
+    {
+        var response = await _taskService.GetTasksidtext();
+        
+        return Ok(response);
     }
 }

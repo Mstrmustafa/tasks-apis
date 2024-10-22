@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tasks_apis.Dtos
+namespace Tasks.Common.ViewModels
 {
-    public class CreateTaskDTO
+    public class CreateTaskDto
     {
         [Required]
         public string? Text { get; set; }
@@ -14,9 +14,6 @@ namespace tasks_apis.Dtos
         public string? ExternalInternal { get; set; }
 
         [Required]
-        public string? Timing { get; set; }
+        public DateOnly? Timing { get; set; }
     }
-
-
-
 }

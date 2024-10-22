@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace tasks_apis.Models
+namespace Tasks.Common.Models
 {
     public class TaskModel
     {
@@ -15,7 +15,7 @@ namespace tasks_apis.Models
         public string? ExternalInternal { get; set; }
 
         [Required]
-        public string? Timing { get; set; }
+        public DateOnly? Timing { get; set; }
         public string? ImgSrc { get; set; }
     }
 }
