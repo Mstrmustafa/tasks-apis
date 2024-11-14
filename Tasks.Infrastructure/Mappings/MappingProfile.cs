@@ -10,6 +10,9 @@ namespace Tasks.Infrastructure.Mappings
         {
             CreateMap<TaskModel, CreateTaskDto>();
             CreateMap<CreateTaskDto, TaskModel>();
+            //CreateProjection<TaskModel,CreateTaskDto>()
+            //    .ForMember(dest=>dest.Text,opt=>opt.MapFrom(src=>src.Text))
+            //    .ForMember(dest=>dest.ExternalInternal,opt=>opt.MapFrom(src=> src.ExternalInternal + " " + src.Text));
         }
     }
 }

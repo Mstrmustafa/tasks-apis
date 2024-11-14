@@ -4,14 +4,8 @@ using Tasks.Infrastructure.Service;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TaskController : ControllerBase
+public class TaskController(ITaskService _taskService) : ControllerBase
 {
-    private readonly ITaskService _taskService;
-
-    public TaskController(ITaskService taskService)
-    {
-        _taskService = taskService;
-    }
 
     [HttpPost("create-task")]
     public async Task<ActionResult> CreateTask([FromBody] CreateTaskDto createTaskViewModel)
